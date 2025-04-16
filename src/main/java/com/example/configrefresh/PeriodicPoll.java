@@ -2,6 +2,7 @@ package com.example.configrefresh;
 
 import io.micronaut.configuration.jdbc.hikari.DatasourceConfiguration;
 import io.micronaut.context.ApplicationContext;
+import io.micronaut.context.BeanRegistration;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.runtime.context.scope.refresh.RefreshEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
@@ -29,6 +30,14 @@ public class PeriodicPoll {
 
     @EventListener
     public void onRefresh(RefreshEvent event) {
+        LOG.info("Got refresh event: {}", event, new Throwable());
         LOG.info("Refreshed password property: {}", applicationContext.getProperty("datasources.default.password", String.class));
+        LOG.info("Datasource property after refresh: {}", datasourceConfiguration.getCredentials().getPassword());
+
+        BeanRegistration reg = applicationContext.findBeanRegistration(datasourceConfiguration).orElse(null);
+        if (reg != null) {
+            applicationContext.refreshBean(reg);
+            LOG.info("Datasource property after explicit refreshBean: {}", datasourceConfiguration.getCredentials().getPassword());
+        }
     }
 }

@@ -32,8 +32,9 @@ public class PeriodicConfigRefresh {
             fixedDelay = "${micronaut.config.refresh.fixed-delay:1m}")
     void refreshConfig() {
         if (started && environment.isRunning()) {
+            LOG.info("Start periodic config refresh");
             Map<String, Object> changes = environment.refreshAndDiff();
-            LOG.debug("Keys of changed properties: {}", changes.keySet());
+            LOG.info("Keys of changed properties: {}", changes.keySet());
             if (!changes.isEmpty()) {
                 eventPublisher.publishEvent(new RefreshEvent(changes));
             }
