@@ -4,6 +4,7 @@ import io.micronaut.configuration.jdbc.hikari.DatasourceConfiguration;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.BeanRegistration;
 import io.micronaut.context.annotation.Context;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.runtime.context.scope.refresh.RefreshEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.scheduling.annotation.Scheduled;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Context
+@Requires(property = "configrefresh")
 public class PeriodicPoll {
     private static final Logger LOG = LoggerFactory.getLogger(PeriodicPoll.class);
     private final ApplicationContext applicationContext;
@@ -30,7 +32,7 @@ public class PeriodicPoll {
 
     @EventListener
     public void onRefresh(RefreshEvent event) {
-        LOG.info("Got refresh event: {}", event, new Throwable());
+        LOG.info("Got refresh event: {}", event);
         LOG.info("Refreshed password property: {}", applicationContext.getProperty("datasources.default.password", String.class));
         LOG.info("Datasource property after refresh: {}", datasourceConfiguration.getCredentials().getPassword());
 
