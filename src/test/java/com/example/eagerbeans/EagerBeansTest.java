@@ -19,6 +19,9 @@ public class EagerBeansTest {
     RegularBean testedRegularBean;
 
     @Inject
+    TestedBean testedBean;
+
+    @Inject
     ApplicationContext context;
 
     @Singleton

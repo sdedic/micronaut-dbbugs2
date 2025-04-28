@@ -11,8 +11,9 @@ public class ScheduledBean extends TestedBean {
         super(appService);
     }
 
-    @Scheduled(fixedDelay = "20s" /*, initialDelay = "5s" */)
+    @Scheduled(fixedDelay = "1s" /*, initialDelay = "5s" */)
     public void scheduledMethod(AppService service) {
+        Thread.dumpStack();
         super.scheduledMethod(service);
     }
 }
